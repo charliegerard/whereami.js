@@ -6,6 +6,8 @@ _Inspired by the Python module [whereami](https://github.com/kootenpv/whereami) 
 
 Built using [node-wifi](https://github.com/friedrith/node-wifi) and [TensorFlow.js](https://github.com/tensorflow/tfjs/tree/master/tfjs-node)
 
+_Current working version: Node.js v14.15.2_
+
 ## How to use
 
 ### Install
@@ -19,7 +21,7 @@ npm install whereami.js
 Example:
 
 ```javascript
-node server.js learn kitchen
+whereami learn kitchen
 ```
 
 ### Train
@@ -31,7 +33,7 @@ node train.js
 ### Predict
 
 ```javascript
-node predict.js
+whereami predict
 ```
 
 ## Applications

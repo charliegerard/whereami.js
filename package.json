@@ -1,13 +1,15 @@
 {
   "name": "whereami.js",
   "version": "1.0.0",
-  "description": "",
+  "description": "Node.js module to predict indoor location using machine learning and wifi information.",
   "main": "server.js",
+  "bin": {
+    "whereami": "server.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "author": "",
+  "author": "Charlie Gerard <charlie.a.gerard@gmail.com",
   "license": "ISC",
   "dependencies": {
     "@tensorflow/tfjs": "^2.8.5",
