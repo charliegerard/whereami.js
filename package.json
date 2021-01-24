@@ -4,7 +4,7 @@
   "description": "Node.js module to predict indoor location using machine learning and wifi information.",
   "main": "server.js",
   "bin": {
-    "whereami": "server.js"
+    "whereamijs": "./server.js"
   },
   "scripts": {
     "start": "node server.js"
@@ -14,6 +14,8 @@
   "dependencies": {
     "@tensorflow/tfjs": "^2.8.5",
     "@tensorflow/tfjs-node": "^2.8.5",
+    "ml-random-forest": "^2.0.2",
+    "netlify-cli": "^3.4.2",
     "node-wifi": "^2.0.14"
   }
 }
