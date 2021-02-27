@@ -93,7 +93,7 @@ const predict = async (liveData) => {
   }
 
   const options = {
-    seed: 30,
+    seed: 3,
     maxFeatures: 0.8,
     replacement: true,
     nEstimators: 100,

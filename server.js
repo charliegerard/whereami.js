@@ -5,7 +5,6 @@ const fs = require("fs");
 const predict = require("./predict.js");
 const command = process.argv[2];
 const room = process.argv[3];
-let data = [];
 let sample = [];
 
 if (!command) {
@@ -21,54 +20,6 @@ if (!room && command !== "predict") {
 wifi.init({
   iface: null, // network interface, choose a random wifi interface if set to null
 });
-
-// if (command === "learn") {
-//   const customInterval = setInterval(async function () {
-//     if (data.length < 1) {
-//       if (sample.length < 1) {
-//         // return getWifiInfo();
-//         // return getNetworks();
-//         // wifi.scan((error, networks) => {
-//         //   if (error) {
-//         //     throw new Error(error);
-//         //   }
-//         //   const networkObject = {};
-//         //   const networksData = networks.map((network) => {
-//         //     const key = `${network.ssid} ${network.bssid}`;
-//         //     const value = network.quality;
-//         //     networkObject[key] = value;
-//         //     return networkObject;
-//         //   });
-//         //   sample.push(networksData);
-//         // });
-//       } else {
-//         data.push(sample);
-//         sample = [];
-//       }
-//     } else {
-//       clearInterval(customInterval);
-//       fs.writeFile(
-//         `./data/${room}.json`,
-//         JSON.stringify(data),
-//         function (err, data) {
-//           if (err) {
-//             return console.log(err);
-//           }
-//         }
-//       );
-//     }
-//   }, 10);
-// }
-
-// const getWifiInfo = () => {
-//   wifi.getCurrentConnections(async (error, currentConnections) => {
-//     error
-//       ? console.log(error)
-//       : // : sample.push(currentConnections[0].signal_level);
-//         sample.push(currentConnections);
-//   });
-//   return sample;
-// };
 
 const getNetworks = () => {
   return wifi.scan((error, networks) => {
@@ -106,9 +57,7 @@ const predictLocation = () => {
     if (error) {
       throw new Error(error);
     }
-
     const networkObject = {};
-
     networks.forEach((network) => {
       const key = `${network.ssid} ${network.bssid}`;
       const value = network.quality;
