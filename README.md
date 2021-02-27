@@ -4,7 +4,7 @@ Node.js module to predict indoor location using machine learning and wifi inform
 
 _Inspired by the Python module [whereami](https://github.com/kootenpv/whereami) by [kootenpv](https://github.com/kootenpv)_
 
-Built using [node-wifi](https://github.com/friedrith/node-wifi) and [TensorFlow.js](https://github.com/tensorflow/tfjs/tree/master/tfjs-node)
+Built using [node-wifi](https://github.com/friedrith/node-wifi) and [ml-random-forest](https://github.com/mljs/random-forest)
 
 _Current working version: Node.js v14.15.2_
 
@@ -22,12 +22,6 @@ Example:
 
 ```javascript
 whereami learn kitchen
-```
-
-### Train
-
-```javascript
-node train.js
 ```
 
 ### Predict
