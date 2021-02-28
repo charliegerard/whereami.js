@@ -1,11 +1,16 @@
-const { RandomForestClassifier } = require("ml-random-forest");
-const fs = require("fs");
+const fs = require("fs"),
+  RandomForestClassifier = require("random-forest-classifier")
+    .RandomForestClassifier;
 const util = require("util");
 let labels = [];
 let features = [];
 let classes = [];
 const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
+
+var rf = new RandomForestClassifier({
+  n_estimators: 10,
+});
 
 // Get training data from JSON files
 const getData = async () => {
@@ -38,16 +43,21 @@ const predict = async (liveData) => {
   classes.map((c, i) => features[0].map((s) => labels.push(i)));
   features = features.flat();
 
-  // For each network in the training data, network names might not all be the same as networks are not constant.
-  // To make sure we optimise the prediction, we look at the networks in the live data and compare it to our training set
-  // to only keep the values present in all objects.
+  /* 
+    For each network in the training data, network names might not all be the same as networks are not constant.
+    To make sure we optimise the prediction, we look at the networks in the live data and compare it to our training set
+    to only keep the values present in all objects. 
+  */
   const liveDataNetworks = Object.keys(liveData[0]);
   const trainingDataNetworks = features.map((feature) =>
     Object.keys(feature).filter((element) => liveDataNetworks.includes(element))
   );
 
-  // The array is flattened so we can extract the network names that are present in all training samples.
-  // If a network name is found as many times as there are objects in the training set, we know we have enough samples to use this network.
+  /*
+    The array is flattened so we can extract the network names that are present in all training samples.
+    If a network name is found as many times as there are objects in the training set, we know this network was 
+    found every time we sampled wifi data so we should keep it.
+  */
   var networksOccurences = trainingDataNetworks
     .flat()
     .reduce(function (acc, curr) {
@@ -63,69 +73,47 @@ const predict = async (liveData) => {
     (entry) => entry[1] === trainingDataNetworks.length
   );
 
-  // Then, we keep the network names so we can sort them.
+  // Sort network names aphabetically so we can be sure all data will be used in the same order.
   const sortedNames = commonNetworks.map((t) => t[0]).sort();
-
   networks = sortedNames;
 
-  // Keep only the networks values
-  const networksValues = features.map((feature) =>
-    Object.keys(feature)
-      .map((f) => (sortedNames.includes(f) ? feature[f] : null))
-      .filter(Number)
-  );
+  // Keep networks objects
+  const networksValues = features.map((feature) => {
+    const test = {};
+    return Object.keys(feature)
+      .sort()
+      .map((f, i) => {
+        if (sortedNames.includes(f)) {
+          const key = f;
+          const value = feature[f];
+          test[key] = value;
+          return test;
+        }
+      })
+      .filter(Boolean);
+  });
+  // Weirdly, the array outputs too many objects so we just keep the 1st one
+  const outputNetworksData = networksValues.map((network) => network[0]);
 
-  // Push labels into features
-  networksValues.map((network, index) => network.push(labels[index]));
+  // Insert the room as a key/value pair in each object
+  outputNetworksData.map((data, i) => (data["room"] = labels[i]));
 
-  // If running into the issue of column indices, remember that features and labels have to be divisible by 8.
-  // Current number of samples working - 4
+  // Shuffle the data so we don't have any overfitting
+  shuffle(outputNetworksData);
 
-  shuffle(networksValues);
+  const trainingData = outputNetworksData;
 
-  const dataset = networksValues;
-  const trainingSet = new Array(dataset.length);
-  const predictions = new Array(dataset.length);
+  // Format the live data the same way as the training data
+  const formattedLiveData = formatLiveData(liveData);
 
-  for (let i = 0; i < dataset.length; ++i) {
-    trainingSet[i] = dataset[i].slice(0, dataset[i].length - 1);
-    predictions[i] = dataset[i][dataset[i].length - 1];
-  }
+  // Fit the random forest classifier and predict
+  rf.fit(trainingData, null, "room", function (err, trees) {
+    //console.log(JSON.stringify(trees, null, 4));
+    var pred = rf.predict([formattedLiveData], trees);
 
-  // const options = {
-  //   seed: 3,
-  //   maxFeatures: 0.8,
-  //   replacement: true,
-  //   nEstimators: 100,
-  // };
-
-  const options = {
-    seed: 3,
-    maxFeatures: 0.8,
-    replacement: true,
-    nEstimators: 25,
-  };
-
-  function getAccuracy(predictions, target) {
-    const nSamples = predictions.length;
-    let nCorrect = 0;
-    predictions.forEach((val, idx) => {
-      if (val == target[idx]) {
-        nCorrect++;
-      }
-    });
-    return nCorrect / nSamples;
-  }
-
-  if (predictions) {
-    const classifier = new RandomForestClassifier(options);
-    classifier.train(trainingSet, predictions);
-    const liveDataFormatted = formatLiveData(liveData);
-
-    const result = classifier.predict([liveDataFormatted]);
-    console.log(classes[result[0]]);
-    console.log(`Accuracy: ${getAccuracy(result, predictions)}`); // Accuracy: 0.74
-  }
+    console.log("pred index", pred);
+    console.log("prediction", classes[pred[0]]);
+  });
 };
 
 const shuffle = (array) => {
@@ -160,13 +148,19 @@ const formatLiveData = (data) => {
   // Keep only the same networks as the ones found in the training data and return the values
   const values = Object.keys(sortedData)
     .map((network) => {
+      const netObject = {};
       if (networks.includes(network)) {
-        return sortedData[network];
+        const key = network;
+        const value = sortedData[key];
+        netObject[key] = value;
+        return netObject;
       }
     })
-    .filter(Number);
+    .filter(Boolean);
 
-  return values;
+  let merged = Object.assign(...values);
+
+  return merged;
 };
 
 module.exports = predict;
