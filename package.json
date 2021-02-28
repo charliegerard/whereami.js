@@ -12,7 +12,6 @@
   "author": "Charlie Gerard <charlie.a.gerard@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "ml-random-forest": "^2.0.2",
     "node-wifi": "^2.0.14",
     "random-forest-classifier": "^0.6.0",
     "webpack": "^5.18.0",
