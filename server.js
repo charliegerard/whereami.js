@@ -2,7 +2,7 @@
 
 const wifi = require("node-wifi");
 const fs = require("fs");
-const predict = require("./predict.js");
+const predict = require("./predict2.js");
 const command = process.argv[2];
 const room = process.argv[3];
 let sample = [];

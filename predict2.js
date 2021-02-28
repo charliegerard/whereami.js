@@ -1,11 +1,17 @@
-const { RandomForestClassifier } = require("ml-random-forest");
-const fs = require("fs");
+const fs = require("fs"),
+  RandomForestClassifier = require("random-forest-classifier")
+    .RandomForestClassifier;
+
 const util = require("util");
 let labels = [];
 let features = [];
 let classes = [];
 const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
+
+var rf = new RandomForestClassifier({
+  n_estimators: 10,
+});
 
 // Get training data from JSON files
 const getData = async () => {
@@ -65,39 +71,39 @@ const predict = async (liveData) => {
 
   // Then, we keep the network names so we can sort them.
   const sortedNames = commonNetworks.map((t) => t[0]).sort();
-
   networks = sortedNames;
 
   // Keep only the networks values
-  const networksValues = features.map((feature) =>
-    Object.keys(feature)
-      .map((f) => (sortedNames.includes(f) ? feature[f] : null))
-      .filter(Number)
-  );
+  const networksValues = features.map((feature) => {
+    const test = {};
+    return Object.keys(feature)
+      .sort()
+      .map((f, i) => {
+        if (sortedNames.includes(f)) {
+          const key = f;
+          const value = feature[f];
+          test[key] = value;
+          return test;
+        }
+      })
+      .filter(Boolean);
+  });
+  //   console.log(networksValues);
+  const test = networksValues.map((network) => network[0]);
 
-  // Push labels into features
-  networksValues.map((network, index) => network.push(labels[index]));
+  test.map((data, i) => (data["room"] = labels[i]));
 
-  // If running into the issue of column indices, remember that features and labels have to be divisible by 8.
-  // Current number of samples working - 4
+  shuffle(test);
 
-  shuffle(networksValues);
+  const dataset = test;
 
-  const dataset = networksValues;
-  const trainingSet = new Array(dataset.length);
-  const predictions = new Array(dataset.length);
-
-  for (let i = 0; i < dataset.length; ++i) {
-    trainingSet[i] = dataset[i].slice(0, dataset[i].length - 1);
-    predictions[i] = dataset[i][dataset[i].length - 1];
-  }
-
-  // const options = {
-  //   seed: 3,
-  //   maxFeatures: 0.8,
-  //   replacement: true,
-  //   nEstimators: 100,
-  // };
+  //   const trainingData = test.slice(0, dataset.length - 2);
+  const trainingData = test;
+  //   const testData = test.slice(dataset.length - 2);
+  //   console.log("before", testData);
+  //   delete testData[0].room;
+  //   delete testData[1].room;
+  //   console.log("after", testData);
 
   const options = {
     seed: 3,
@@ -106,26 +112,18 @@ const predict = async (liveData) => {
     nEstimators: 25,
   };
 
-  function getAccuracy(predictions, target) {
-    const nSamples = predictions.length;
-    let nCorrect = 0;
-    predictions.forEach((val, idx) => {
-      if (val == target[idx]) {
-        nCorrect++;
-      }
-    });
-    return nCorrect / nSamples;
-  }
+  const formattedLiveData = formatLiveData(liveData);
+  //   console.log(trainingData);
+  //   console.log(formattedLiveData);
 
-  if (predictions) {
-    const classifier = new RandomForestClassifier(options);
-    classifier.train(trainingSet, predictions);
-    const liveDataFormatted = formatLiveData(liveData);
+  rf.fit(trainingData, null, "room", function (err, trees) {
+    //console.log(JSON.stringify(trees, null, 4));
+    var pred = rf.predict([formattedLiveData], trees);
 
-    const result = classifier.predict([liveDataFormatted]);
-    console.log(classes[result[0]]);
-    console.log(`Accuracy: ${getAccuracy(result, predictions)}`); // Accuracy: 0.74
-  }
+    console.log("pred index", pred);
+    console.log("prediction", classes[pred[0]]);
+    // pred = ["virginica", "setosa"]
+  });
 };
 
 const shuffle = (array) => {
@@ -160,13 +158,19 @@ const formatLiveData = (data) => {
   // Keep only the same networks as the ones found in the training data and return the values
   const values = Object.keys(sortedData)
     .map((network) => {
+      const netObject = {};
       if (networks.includes(network)) {
-        return sortedData[network];
+        const key = network;
+        const value = sortedData[key];
+        netObject[key] = value;
+        return netObject;
       }
     })
-    .filter(Number);
+    .filter(Boolean);
 
-  return values;
+  let merged = Object.assign(...values);
+
+  return merged;
 };
 
 module.exports = predict;
