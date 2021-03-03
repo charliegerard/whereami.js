@@ -1,0 +1,78 @@
+body {
+  font-family: Helvetica;
+  background: white;
+}
+
+h1,
+h2 {
+  text-align: center;
+  color: rgb(50, 50, 50);
+}
+
+h2 {
+  font-size: 1.1em;
+}
+
+h3 {
+  font-size: 1em;
+  text-align: center;
+}
+
+/* .predicting {
+  background: rgb(246, 246, 246);
+  border-radius: 5px;
+  padding: 0.5em;
+  margin-bottom: 1em;
+} */
+
+.training {
+  margin-bottom: 1em;
+}
+
+.training label {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+input {
+  padding: 1em;
+  display: block;
+  width: 90%;
+  margin: 1em auto;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 5px;
+}
+
+button,
+.record {
+  padding: 0.7em;
+  font-size: 1em;
+  display: block;
+  margin: 0 auto;
+  width: 90%;
+  border: none;
+  border-radius: 5px;
+  color: rgb(50, 50, 50);
+  font-weight: bold;
+}
+
+.training-samples p {
+  margin: 0.5em;
+}
+
+.loading {
+  animation: fade 1s ease infinite;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}

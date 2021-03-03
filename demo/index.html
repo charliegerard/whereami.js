@@ -3,18 +3,47 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Whereami.js demo</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <h1>Whereami.js</h1>
-    <p>
+    <h2>📡</h2>
+    <h2>
       Util to predict indoor location using machine learning and wifi
       information.
-    </p>
-    <input class="label" type="text" />
-    <button class="record">Record</button>
-    <!-- <button>Add input</button> -->
-    <button class="predict">Predict</button>
-    <h3 class="state"></h3>
+    </h2>
+    <section class="training">
+      <div>1. Record some training data in multiple locations.</div>
+
+      <form>
+        <label for="location"
+          >Location:
+          <input
+            type="text"
+            name="location"
+            id="location"
+            class="label"
+            placeholder="e.g kitchen"
+            required
+          />
+        </label>
+        <button class="record">Record</button>
+      </form>
+    </section>
+
+    <section class="training-samples">
+      <h3></h3>
+    </section>
+
+    <section class="predicting">
+      <div>
+        2. Predict your current location based on the data previously recorded.
+      </div>
+      <button class="predict">Predict</button>
+      <section class="prediction-output"></section>
+      <h3 class="state"></h3>
+    </section>
+
     <script src="index.js" type="module"></script>
   </body>
 </html>
