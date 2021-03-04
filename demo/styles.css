@@ -37,7 +37,7 @@ h3 {
 .training p,
 .predicting p {
   margin: 0 0 1.5em 0;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 input {
@@ -81,12 +81,14 @@ button,
 
 .training-samples h3 {
   padding: 0 0.8em;
+  font-weight: 400;
 }
 
 .training-samples p {
   margin: 0.2em 0;
   padding: 0.8em;
   text-transform: capitalize;
+  font-weight: 300;
 }
 
 .training-samples p:nth-child(even) {
@@ -106,16 +108,18 @@ button,
   width: 1px;
 }
 
-.prediction-output {
+.predicting .prediction-output {
   font-weight: 700;
   text-align: center;
   font-size: 1.5em;
   display: none;
+  margin-top: 1em;
 }
 
 footer {
   text-align: center;
   margin-bottom: 1em;
+  font-weight: 300;
 }
 
 footer a {
@@ -131,5 +135,40 @@ footer a {
   }
   100% {
     opacity: 1;
+  }
+}
+
+@media (min-width: 750px) {
+  .container {
+    display: grid;
+    width: 100%;
+    justify-content: space-between;
+    grid-template-columns: 30% 30% 30%;
+    margin-top: 10em;
+  }
+
+  h1 {
+    font-size: 2.5em;
+  }
+
+  h2:nth-of-type(1) {
+    font-size: 2em;
+  }
+
+  h2:nth-of-type(2) {
+    font-size: 1.5em;
+  }
+
+  footer {
+    position: absolute;
+    bottom: 1em;
+    width: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  main {
+    width: 75%;
+    max-width: 1500px;
   }
 }
