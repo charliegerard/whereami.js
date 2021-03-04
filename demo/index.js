@@ -12,7 +12,7 @@ const record = (label) => {
     recordButton.disabled = true;
     recordButton.innerText = "Recording...";
     recordButton.classList.add("loading");
-    return fetch("/.netlify/functions/record", {
+    return fetch("../.netlify/functions/record", {
       method: "POST",
       body: JSON.stringify({ label }),
     })

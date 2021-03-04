@@ -44,7 +44,7 @@ Here are some ideas of what it could be used for:
 - Pause TV when leaving a room.
 - Block notifications when in the bedroom.
 
-### Run/develop locally
+## Run/develop locally
 
 Clone this repo, `cd` into it and run `node server.js learn kitchen` or `node.js server predict`.
 
