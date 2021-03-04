@@ -12,7 +12,7 @@ const record = (label) => {
     recordButton.disabled = true;
     recordButton.innerText = "Recording...";
     recordButton.classList.add("loading");
-    return fetch("../.netlify/functions/record", {
+    return fetch("/.netlify/functions/record", {
       method: "POST",
       body: JSON.stringify({ label }),
     })
@@ -35,7 +35,8 @@ const record = (label) => {
         const dataP = document.createElement("p");
         dataP.innerText = data.label;
         trainingSamplesSection.appendChild(dataP);
-      });
+      })
+      .catch((error) => console.log(error));
   }
 };
 
