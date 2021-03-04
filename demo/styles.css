@@ -1,6 +1,16 @@
 body {
-  font-family: Helvetica;
-  background: white;
+  font-family: "Roboto", sans-serif;
+  background: rgb(250, 250, 250);
+}
+
+main {
+  width: 95%;
+  display: block;
+  margin: 0 auto 2em auto;
+}
+
+h1 {
+  font-weight: 900;
 }
 
 h1,
@@ -11,22 +21,11 @@ h2 {
 
 h2 {
   font-size: 1.1em;
+  font-weight: 700;
 }
 
 h3 {
   font-size: 1em;
-  text-align: center;
-}
-
-/* .predicting {
-  background: rgb(246, 246, 246);
-  border-radius: 5px;
-  padding: 0.5em;
-  margin-bottom: 1em;
-} */
-
-.training {
-  margin-bottom: 1em;
 }
 
 .training label {
@@ -35,11 +34,17 @@ h3 {
   text-align: center;
 }
 
+.training p,
+.predicting p {
+  margin: 0 0 1.5em 0;
+  font-weight: 300;
+}
+
 input {
   padding: 1em;
   display: block;
   width: 90%;
-  margin: 1em auto;
+  margin: 0 auto 1em auto;
   border: 1px solid rgb(200, 200, 200);
   border-radius: 5px;
 }
@@ -57,12 +62,64 @@ button,
   font-weight: bold;
 }
 
+.training,
+.predicting {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 1em;
+  margin: 1em 0;
+  background: white;
+}
+
+.training-samples {
+  background: white;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  max-height: 15em;
+  overflow-y: scroll;
+}
+
+.training-samples h3 {
+  padding: 0 0.8em;
+}
+
 .training-samples p {
-  margin: 0.5em;
+  margin: 0.2em 0;
+  padding: 0.8em;
+  text-transform: capitalize;
+}
+
+.training-samples p:nth-child(even) {
+  background: rgb(245, 245, 245);
 }
 
 .loading {
   animation: fade 1s ease infinite;
+}
+
+.visuallyhidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.prediction-output {
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.5em;
+  display: none;
+}
+
+footer {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+footer a {
+  color: black;
 }
 
 @keyframes fade {

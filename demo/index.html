@@ -4,20 +4,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Whereami.js demo</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <h1>Whereami.js</h1>
-    <h2>📡</h2>
-    <h2>
-      Util to predict indoor location using machine learning and wifi
-      information.
-    </h2>
-    <section class="training">
-      <div>1. Record some training data in multiple locations.</div>
+    <main>
+      <h1>Whereami.js</h1>
+      <h2>📡</h2>
+      <h2>
+        Util to predict indoor location using machine learning and wifi
+        information.
+      </h2>
+      <section class="training">
+        <p>1. Record some training data in multiple locations.</p>
 
-      <form>
-        <label for="location"
-          >Location:
+        <form>
+          <label for="location" class="visuallyhidden">Location: </label>
           <input
             type="text"
             name="location"
@@ -26,23 +31,28 @@
             placeholder="e.g kitchen"
             required
           />
-        </label>
-        <button class="record">Record</button>
-      </form>
-    </section>
+          <button class="record">Record</button>
+        </form>
+      </section>
 
-    <section class="training-samples">
-      <h3></h3>
-    </section>
+      <section class="training-samples">
+        <h3></h3>
+      </section>
 
-    <section class="predicting">
-      <div>
-        2. Predict your current location based on the data previously recorded.
-      </div>
-      <button class="predict">Predict</button>
-      <section class="prediction-output"></section>
-      <h3 class="state"></h3>
-    </section>
+      <section class="predicting">
+        <p>
+          2. Predict your current location based on the data previously
+          recorded.
+        </p>
+        <button class="predict">Predict</button>
+        <p class="prediction-output"></p>
+      </section>
+    </main>
+
+    <footer>
+      Built by <a href="https://charliegerard.dev">Charlie Gerard</a> -
+      <a href="https://twitter.com/devdevcharlie">@devdevcharlie</a>
+    </footer>
 
     <script src="index.js" type="module"></script>
   </body>

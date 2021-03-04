@@ -4,7 +4,8 @@ const data = [];
 const recordButton = document.getElementsByClassName("record")[0];
 const predictButton = document.getElementsByClassName("predict")[0];
 const trainingSamplesSection = document.querySelector(".training-samples");
-const state = document.querySelector("h3");
+const predictionOutput = document.querySelector(".prediction-output");
+const sampleLabel = document.getElementsByClassName("label")[0].value;
 
 const record = (label) => {
   if (label) {
@@ -19,6 +20,8 @@ const record = (label) => {
       .then((data) => {
         recordButton.disabled = false;
         recordButton.innerText = "Record";
+        recordButton.classList.remove("loading");
+        document.getElementsByClassName("label")[0].value = "";
         if (localStorage.getItem("whereamijs")) {
           let locationData = localStorage.getItem("whereamijs");
           let locationDataArray = JSON.parse(locationData);
@@ -27,7 +30,11 @@ const record = (label) => {
         } else {
           localStorage.setItem("whereamijs", JSON.stringify([data]));
         }
-        displayLocationsTrained();
+
+        // display new location trained
+        const dataP = document.createElement("p");
+        dataP.innerText = data.label;
+        trainingSamplesSection.appendChild(dataP);
       });
   }
 };
@@ -35,6 +42,7 @@ const record = (label) => {
 const predict = () => {
   predictButton.disabled = true;
   predictButton.innerText = "Predicting...";
+  predictButton.classList.add("loading");
 
   let trainingData;
 
@@ -46,10 +54,11 @@ const predict = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("PREDICT DATA", data);
-
         predictButton.disabled = false;
         predictButton.innerText = "Predict";
+        predictButton.classList.remove("loading");
+        predictionOutput.innerText = `Location predicted: ${data}`;
+        predictionOutput.style.display = "block";
       })
       .catch((e) => {
         console.log("Error", e);
@@ -92,6 +101,7 @@ const displayLocationsTrained = () => {
     sectionTitle.innerText = "No location trained";
   }
 };
+
 window.onload = () => {
   displayLocationsTrained();
 };
