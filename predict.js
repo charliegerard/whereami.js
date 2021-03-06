@@ -16,7 +16,7 @@ var rf = new RandomForestClassifier({
 const getData = async () => {
   let names;
   try {
-    names = await readdir(`./data`);
+    names = await readdir(`./whereamijs-data`);
   } catch (err) {
     console.log(err);
   }
@@ -26,7 +26,7 @@ const getData = async () => {
   return Promise.all(
     names.map(async (name) => {
       classes.push(name.split(".")[0]);
-      return await readFile(`./data/${name}`);
+      return await readFile(`./whereamijs-data/${name}`);
     })
   );
 };
