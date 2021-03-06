@@ -116,9 +116,24 @@ if (command === "learn" || command === "-l") {
 }
 
 if (command === "predict" || command === "-p") {
-  predictLocation();
+  if (!fs.existsSync(dir)) {
+    console.error(
+      `You don't have any training data recorded. Start with the learn command!
+      
+    For example: whereamijs learn bathroom
+      `
+    );
+    process.exit(9);
+  } else {
+    predictLocation();
+  }
 }
 
 if (command === "rooms" || command === "-r") {
-  listRooms();
+  if (!fs.existsSync(dir)) {
+    console.error(`You don't have any training data recorded.`);
+    process.exit(9);
+  } else {
+    listRooms();
+  }
 }
