@@ -1,19 +1,28 @@
 #!/usr/bin/env node
-
 const wifi = require("node-wifi");
 const fs = require("fs");
 const predict = require("./predict.js");
+const loading = require("loading-cli");
+
 const command = process.argv[2];
 const room = process.argv[3];
 let sample = [];
+let load;
 
 if (!command) {
-  console.log("You forgot to pass a command argument.");
+  console.log(`You forgot to pass a command argument.
+
+  Options: 
+    learn, -l <room>, get and save wifi data for a specific room
+    predict, -p, predict current location
+  `);
   process.exit(9);
 }
 
 if (!room && command !== "predict") {
-  console.error("You forgot to pass a command argument.");
+  console.error(
+    `You forgot to specify a room. For example: whereamijs learn kitchen`
+  );
   process.exit(9);
 }
 
@@ -22,6 +31,13 @@ wifi.init({
 });
 
 const getNetworks = () => {
+  if (!load) {
+    load = loading({
+      text: "✨ Getting Wifi data 📶 This can take up to 15s! ✨",
+      color: "yellow",
+      frames: ["◰", "◳", "◲", "◱"],
+    }).start();
+  }
   return wifi.scan((error, networks) => {
     if (error) {
       throw new Error(error);
@@ -38,6 +54,7 @@ const getNetworks = () => {
     if (sample.length < 5) {
       getNetworks();
     } else {
+      load.stop();
       fs.writeFile(
         `./data/${room}.json`,
         JSON.stringify(sample),
@@ -53,6 +70,13 @@ const getNetworks = () => {
 };
 
 const predictLocation = () => {
+  if (!load) {
+    load = loading({
+      text: "✨ Predicting current location... ✨",
+      color: "yellow",
+      frames: ["◰", "◳", "◲", "◱"],
+    }).start();
+  }
   return wifi.scan((error, networks) => {
     if (error) {
       throw new Error(error);
@@ -66,14 +90,15 @@ const predictLocation = () => {
     });
 
     sample.push(networkObject);
+    load.stop();
     return predict(sample);
   });
 };
 
-if (command === "learn") {
+if (command === "learn" || command === "-l") {
   getNetworks();
 }
 
-if (command === "predict") {
+if (command === "predict" || command === "-p") {
   predictLocation();
 }

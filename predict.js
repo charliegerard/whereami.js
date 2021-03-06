@@ -110,9 +110,8 @@ const predict = async (liveData) => {
   rf.fit(trainingData, null, "room", function (err, trees) {
     //console.log(JSON.stringify(trees, null, 4));
     var pred = rf.predict([formattedLiveData], trees);
-
-    console.log("pred index", pred);
-    console.log("prediction", classes[pred[0]]);
+    console.log(classes[pred[0]]);
+    return classes[pred[0]];
   });
 };
 

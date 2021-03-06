@@ -1,8 +1,0 @@
-[build]
-  functions = "demo/functions"
-  publish = "demo/"
-
-[dev]
-  command = "npm start"
-  targetPort = 8080
-  port = 8888

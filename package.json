@@ -13,6 +13,7 @@
   "homepage": "https://github.com/charliegerard/whereami.js#readme",
   "license": "GNU",
   "dependencies": {
+    "loading-cli": "^1.1.0",
     "node-wifi": "^2.0.14",
     "random-forest-classifier": "^0.6.0",
     "webpack": "^5.18.0",
