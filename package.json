@@ -9,8 +9,9 @@
   "scripts": {
     "start": "webpack serve"
   },
-  "author": "Charlie Gerard <charlie.a.gerard@gmail.com>",
-  "license": "ISC",
+  "author": "Charlie Gerard <charlie.a.gerard@gmail.com> (https://charliegerard.dev)",
+  "homepage": "https://github.com/charliegerard/whereami.js#readme",
+  "license": "GNU",
   "dependencies": {
     "node-wifi": "^2.0.14",
     "random-forest-classifier": "^0.6.0",

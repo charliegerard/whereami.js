@@ -18,7 +18,7 @@ npm install whereami.js
 
 ### Record data
 
-Record data in each room you'd like to be able to predict later with the `learn` command.
+In each room you'd like to use, record data by using the command `whereamijs learn <room>`.
 
 Example:
 
@@ -27,6 +27,8 @@ whereamijs learn kitchen
 ```
 
 The output of running this command will be a JSON file saved in a `data` folder with the wifi info.
+
+**This command takes a few seconds to get wifi data and save it**
 
 ### Predict
 
@@ -46,6 +48,4 @@ Here are some ideas of what it could be used for:
 
 ## Run/develop locally
 
-Clone this repo, `cd` into it and run `node server.js learn kitchen` or `node.js server predict`.
-
-Then, to test the package, start by running `npm link` and then, `whereamijs predict`.
+Clone this repo, `cd` into it and run `node server.js learn <room>` or `node.js server predict`.
