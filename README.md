@@ -1,5 +1,7 @@
 # whereami.js
 
+_(Side project not intended to be used in production applications)_
+
 Node.js module to predict indoor location using machine learning and wifi information.
 
 _Inspired by the Python module [whereami](https://github.com/kootenpv/whereami) by [kootenpv](https://github.com/kootenpv)_
