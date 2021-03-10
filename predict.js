@@ -73,7 +73,7 @@ const predict = async (liveData) => {
     (entry) => entry[1] === trainingDataNetworks.length
   );
 
-  // Sort network names aphabetically so we can be sure all data will be used in the same order.
+  // Sort network names alphabetically so we can be sure all data will be used in the same order.
   const sortedNames = commonNetworks.map((t) => t[0]).sort();
   networks = sortedNames;
 
