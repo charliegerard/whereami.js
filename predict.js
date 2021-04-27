@@ -7,6 +7,7 @@ let features = [];
 let classes = [];
 const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
+let filenames;
 
 var rf = new RandomForestClassifier({
   n_estimators: 10,
@@ -14,17 +15,16 @@ var rf = new RandomForestClassifier({
 
 // Get training data from JSON files
 const getData = async () => {
-  let names;
   try {
-    names = await readdir(`./whereamijs-data`);
+    filenames = await readdir(`./whereamijs-data`);
   } catch (err) {
     console.log(err);
   }
-  if (names === undefined) {
+  if (filenames === undefined) {
     console.log("undefined");
   }
   return Promise.all(
-    names.map(async (name) => {
+    filenames.map(async (name) => {
       classes.push(name.split(".")[0]);
       return await readFile(`./whereamijs-data/${name}`);
     })
@@ -69,30 +69,47 @@ const predict = async (liveData) => {
       return acc;
     }, {});
 
-  const commonNetworks = Object.entries(networksOccurences).filter(
-    (entry) => entry[1] === trainingDataNetworks.length
+  const commonNetworks = Object.entries(networksOccurences).reduce(
+    (acc, input) => {
+      if (networksOccurences[input[0]] === trainingDataNetworks.length) {
+        acc.push(input[0]);
+      }
+      return acc;
+    },
+    []
   );
 
+  if (!commonNetworks.length) {
+    console.error(
+      "\x1b[31m",
+      `
+    There does not seem to be any common wifi network name in your training data. 
+    For the prediction to work, there has to be at least 1 wifi network name common to all training files. 
+    A network name is made of its SSID & BSSID.
+    You might need to delete some training files and re-record data.`
+    );
+    process.exit(0);
+  }
+
   // Sort network names alphabetically so we can be sure all data will be used in the same order.
-  const sortedNames = commonNetworks.map((t) => t[0]).sort();
+  const sortedNames = commonNetworks.sort();
   networks = sortedNames;
 
   // Keep networks objects
   const networksValues = features.map((feature) => {
-    const test = {};
+    const networkObject = {};
     return Object.keys(feature)
       .sort()
       .map((f, i) => {
         if (sortedNames.includes(f)) {
-          const key = f;
-          const value = feature[f];
-          test[key] = value;
-          return test;
+          networkObject[`${f}`] = feature[f];
+          return networkObject;
         }
       })
       .filter(Boolean);
   });
-  // Weirdly, the array outputs too many objects so we just keep the 1st one
+
+  // The array outputs too many objects so we just keep the 1st one
   const outputNetworksData = networksValues.map((network) => network[0]);
 
   // Insert the room as a key/value pair in each object

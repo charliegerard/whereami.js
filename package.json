@@ -1,6 +1,6 @@
 {
   "name": "whereami.js",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Node.js module to predict indoor location using machine learning and wifi information.",
   "main": "server.js",
   "bin": {
