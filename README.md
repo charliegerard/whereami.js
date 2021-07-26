@@ -56,4 +56,4 @@ Here are some ideas of what it could be used for:
 
 ## Run/develop locally
 
-Clone this repo, `cd` into it and run `node server.js learn <room>` or `node.js server predict`.
+Clone this repo, `cd` into it and run `node server.js learn <room>` or `node server.js predict`.
